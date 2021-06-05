@@ -1,4 +1,6 @@
 from flask import Flask
+from flask import request
+from flask import json
 from lib.interview_soap_client import InterviewSoapClient
 
 app = Flask(__name__)
@@ -30,3 +32,11 @@ def company():
     )
 
     return res
+
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    if request.headers['Content-Type'] == 'application/json':
+        response = json.dumps(request.json)
+        get_issue = response.issue.body
+        print(get_issue)
+        return response
