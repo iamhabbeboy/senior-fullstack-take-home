@@ -137,6 +137,45 @@ class ActiveRecord implements JsonSerializable
         throw (new RecordNotFoundException("Can't find row with ID $id in table " . static::TABLE_NAME));
     }
 
+    public static function where($params)
+    {
+        $keys = "";
+        if(is_array($params)) {
+            foreach($params as $key => $value) {
+                $keys .= $key .'="'. $value.'"';
+            }
+        } else {
+            throw new \Exception("keys must be an array");
+        }
+
+        $sql = 'SELECT * FROM ' . static::TABLE_NAME . " WHERE $keys";
+        $conn = static::getConnection();
+        $stmt = $conn->query($sql);
+        $stmt->setFetchMode(PDO::FETCH_OBJ);
+        $records = $stmt->fetchAll();
+
+        if ($records) {
+            $data = [];
+            foreach($records as $record) {
+                $entity_class = get_called_class();
+                $entity = new $entity_class();
+                $fields = get_object_vars($record);
+                foreach ($fields as $field_name => $value) {
+                    if (DateTime::createFromFormat('Y-m-d H:i:s', $value) !== false) {
+                        $entity->$field_name = new DateTime($value);
+                        continue;
+                    }
+                    $entity->$field_name = $value;
+                }
+                $data[] = $entity;
+        }
+
+            return $data;
+        }
+
+        throw (new RecordNotFoundException("Can't find row with keys ". array_keys($params)."  in table " . static::TABLE_NAME));
+    }
+
     public function destroy()
     {
         if (is_null($this->id)) {
