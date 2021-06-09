@@ -8,10 +8,7 @@ const Header = () => {
         <div className="w-10/12">
           <ul>
             <li className="inline-block px-4 hover:text-gray-900">
-              <Link to="/">Home</Link>
-            </li>
-            <li className="inline-block px-4 hover:text-gray-900">
-              <Link to="/staff">Staff</Link>
+              <Link to="/">Logout</Link>
             </li>
           </ul>
         </div>

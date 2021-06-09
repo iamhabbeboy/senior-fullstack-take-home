@@ -1,4 +1,30 @@
-#!/bin/env php    
+#!/usr/bin/env php    
 <?php
 
-echo "Add utility script here\n";
+//echo "Add utility script here\n";
+
+if (php_sapi_name() !== 'cli') {
+    exit;
+}
+
+$input = $argv;
+if(!isset($input[1])) {
+    exit;
+}
+
+switch($input[1]) {
+    case 'migration':
+        echo 'This is migration';
+        break;
+    case 'seeder':
+        echo 'This is seeder';
+        break;
+    case 'rollback_seeder':
+        echo 'Delete seeder';
+        break;
+    case 'help':
+        echo './setup migration [x] Run SQL and create tables';
+        break;
+    default:
+        break;
+}

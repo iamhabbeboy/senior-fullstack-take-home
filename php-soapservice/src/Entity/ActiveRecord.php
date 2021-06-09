@@ -108,7 +108,7 @@ class ActiveRecord implements JsonSerializable
         $connection = $this->database->getConnection();
         $connection->exec($sql);
 
-        return true;
+        return $this->getConnection()->lastInsertId();
     }
 
     public static function find(int $id)

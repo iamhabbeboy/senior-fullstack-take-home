@@ -6,7 +6,7 @@ class ServiceRequest extends ActiveRecord
 {
     const TABLE_NAME = 'service_request';
 
-    public int $user_id;
+    public $user_id;
 
     public int $company_id;
 
@@ -31,7 +31,12 @@ class ServiceRequest extends ActiveRecord
 
     public function getServiceRate()
     {
-        return ServiceRate::where(['service_id' => 1]);
+        return ServiceRate::where(['service_request_id' => $this->id ?? 0]);
+    }
+
+    public function getStaff()
+    {
+        return User::where(['company_id' => $this->company_id]);
     }
 
     public function jsonSerialize()
@@ -45,7 +50,8 @@ class ServiceRequest extends ActiveRecord
             'proposed_end_date' => $this->proposed_end_date,
             'actual_start_date' => $this->actual_start_date,
             'actual_end_date' => $this->actual_end_date,
-            'company' => $this->getCompany()
+            'company' => $this->getCompany(),
+            'staff' => $this->getStaff()
         ];
     }
 }
