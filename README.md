@@ -30,3 +30,7 @@ The following have been implemented for you to make it easier for you to get sta
 ## What we didn't do for you
 
 The exercise 😜
+## Work Summary
+* Handle Order request via webhook
+* Assign staff
+* Update customer on work status via github comment
