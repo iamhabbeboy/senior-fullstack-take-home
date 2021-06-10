@@ -14,4 +14,5 @@ In the project directory, you can run:
 
 # Work summary
 * Simple dashboard is implemented to list service order via API endpoint `/order`
+  * Admin can assign staff via service order list 
 * Login page created but not integrated with API
