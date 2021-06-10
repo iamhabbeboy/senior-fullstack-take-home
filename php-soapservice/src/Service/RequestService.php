@@ -2,12 +2,17 @@
 
 namespace Application\Service;
 
+use GuzzleHttp\Client;
+use Application\Entity\User;
+use Application\config\DotEnv;
 use Application\Entity\Service;
+use Application\Entity\WorkOrder;
 use Application\Entity\ServiceRate;
 use Application\Entity\ServiceRequest;
 use Application\Exception\NotImplementedException;
 use Application\Exception\RecordNotFoundException;
 
+(new DotEnv())->load();
 class RequestService extends BaseService
 {
     public function helloFromPHP()
@@ -61,5 +66,47 @@ class RequestService extends BaseService
         $defaultDuration = 1.5;
         $workHour = ($defaultDuration * $amount) / $defaultAmount;
         return $workHour;
+    }
+
+    public function setStaff()
+    {
+        $user = User::find($this->params['staff_id']);
+        $userRelationship = $user->jsonSerialize();
+        $serviceRequest = ServiceRequest::find($this->params['service_request_id']);
+        $holidayStartDate = date_format($userRelationship['holiday'][0]->start_date, 'd-m-Y H:i:s');
+        $holidayEndDate = date_format($userRelationship['holiday'][0]->start_date, 'd-m-Y H:i:s');
+        $serviceActualStartDate = date_format($serviceRequest->actual_start_date, 'd-m-Y H:i:s');
+        $serviceActualEndDate = date_format($serviceRequest->actual_end_date, 'd-m-Y H:i:s');
+        return [
+            'start' => $holidayStartDate,
+            'end' => $holidayEndDate,
+            'serviceDate' => $serviceActualStartDate,
+            'enddate' => $serviceActualEndDate,
+            'compare' => ($holidayStartDate >= $serviceActualStartDate) && ($holidayEndDate <= $serviceActualEndDate)
+        ];
+
+        $workOrder = new WorkOrder();
+        $workOrder->service_request_id = $this->params['service_request_id'];
+        $workOrder->user_id = $this->params['staff_id'];
+        $workOrder->status = "started";
+        $orderId  = $workOrder->save();
+        $this->setComment($user);
+
+        return $orderId;
+    }
+
+    private function setComment($user)
+    {
+        $comment = "Your requested has been accepted 🤝 and has 1 work order. ". ucfirst($user->first_name). " ". ucfirst($user->last_name). " has started ";
+        $client = new Client();
+        $response = $client->request('POST', 'https://api.github.com/repos/iamhabbeboy/senior-fullstack-take-home/issues/3/comments', 
+        ['json' => ["body" => $comment],
+        'headers' => [
+            'Accept' => 'application/vnd.github.v3+json',
+            'Authorization' => 'Bearer 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'
+        ]
+        ]);
+
+        return json_decode($response->getBody()->getContents());
     }
 }

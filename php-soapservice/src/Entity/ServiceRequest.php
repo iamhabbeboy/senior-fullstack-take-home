@@ -2,6 +2,10 @@
 
 namespace Application\Entity;
 
+use Application\Service\ResponseCode;
+use Application\Exception\NotImplementedException;
+use Application\Exception\RecordNotFoundException;
+
 class ServiceRequest extends ActiveRecord
 {
     const TABLE_NAME = 'service_request';
@@ -31,12 +35,25 @@ class ServiceRequest extends ActiveRecord
 
     public function getServiceRate()
     {
-        return ServiceRate::where(['service_request_id' => $this->id ?? 0]);
+        try {
+            return ServiceRate::where(['service_request_id' => $this->id ?? 0]);
+        } catch (RecordNotFoundException $e) {
+           return [];
+        }
     }
 
     public function getStaff()
     {
         return User::where(['company_id' => $this->company_id]);
+    }
+
+    public function getWorkOrder()
+    {
+        try {
+            return WorkOrder::where(['service_request_id' => $this->id ?? 0]);
+        } catch (RecordNotFoundException $e) {
+           return [];
+        }
     }
 
     public function jsonSerialize()
@@ -51,7 +68,8 @@ class ServiceRequest extends ActiveRecord
             'actual_start_date' => $this->actual_start_date,
             'actual_end_date' => $this->actual_end_date,
             'company' => $this->getCompany(),
-            'staff' => $this->getStaff()
+            'staff' => $this->getStaff(),
+            'order' => $this->getWorkOrder()
         ];
     }
 }

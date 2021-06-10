@@ -2,6 +2,8 @@
 
 namespace Application\Entity;
 
+use Application\Entity\Holiday;
+
 class User extends ActiveRecord
 {
     const TABLE_NAME = 'users';
@@ -22,10 +24,18 @@ class User extends ActiveRecord
 
     public $phone;
 
+    public function getHoliday()
+    {
+        return Holiday::where(['user_id' => $this->id ?? 0]);
+    }
+
     public function jsonSerialize()
     {
         return [
             'id' => $this->id,
+            'first_name' => $this->first_name,
+            'last_name' => $this->last_name,
+            'holiday' => $this->getHoliday(),
             'name' => $this->first_name . ', '. $this->last_name,
         ];
     }

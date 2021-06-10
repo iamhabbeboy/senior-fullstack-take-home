@@ -14,4 +14,3 @@ $options = [
 $server = new SoapServer(null, $options);
 $server->setClass('\Application\SecureSoapServer');
 $server->handle();
-echo "Hello server";

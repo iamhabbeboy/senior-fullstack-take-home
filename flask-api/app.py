@@ -33,10 +33,6 @@ def auth():
 
     return res
 
-#/api/companies/1/services/1/rate
-#/api/companies?service_type=residential
-#/api/companies/1/workorders?state=finished
-
 @app.route("/api/company/<company_id>")
 def order(company_id):
     soap_client = InterviewSoapClient()
@@ -47,6 +43,20 @@ def order(company_id):
     )
 
     return res
+
+@app.route("/api/company/<company_id>/service", methods=["GET", "POST"])
+def update_service(company_id):
+    if request.method == "POST":
+        staff_id = request.form['user_id']
+        service_request_id = request.form['service_request_id']
+        soap_client = InterviewSoapClient()
+        res = soap_client.call(
+            service='RequestService',
+            action='setStaff',
+            args={'id': company_id, 'staff_id': staff_id, 'service_request_id': service_request_id}
+        )
+
+        return res
 
 
 @app.route("/testing/<company_id>")
@@ -68,6 +78,7 @@ def webhook():
         response = request.json
         issue_title = response["issue"]["title"]
         issue_body = response["issue"]["body"]
+        issue_id = response['issue']['number']
         soap_client = InterviewSoapClient()
         res = soap_client.call(
             service='RequestService',

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { API_URL } from "../config";
 
 const Order = ({ order, index }) => {
@@ -10,19 +10,28 @@ const Order = ({ order, index }) => {
     setStaff(e.target.value);
   };
 
-  const handleUpdateRequest = () => {
+  const handleStatus = event => {
+    console.log(event);
+  };
+
+  const handleUpdateRequest = requestId => {
     if (staff === "") {
-      return alert("Please select a staff");
+      return;
     }
 
-    // useEffect(() => {
-    //   fetch(`${API_URL}/company/1/service`)
-    //     .then(response => response.json())
-    //     .then(response => {
-    //       setOrders(JSON.parse(response).data);
-    //       setLoading(false);
-    //     });
-    // }, []);
+    fetch(`${API_URL}/company/1/service`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: `service_request_id=${requestId}&user_id=${staff}`,
+    })
+      .then(response => response.json())
+      .then(response => {
+        console.log(response);
+        // setOrders(JSON.parse(response).data);
+        // setLoading(false);
+      });
   };
 
   return (
@@ -39,25 +48,14 @@ const Order = ({ order, index }) => {
         <div className="font-medium text-gray-900">{"regular"}</div>
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
-        <select defaultValue={"pending"} className="outline-none">
-          <option
-            value="pending"
-            defaultValue={order.status === "pending" ? true : false}
-          >
-            {"Pending"}
-          </option>
-          <option
-            value="started"
-            defaultValue={order.status === "started" ? true : false}
-          >
-            {"Started"}
-          </option>
-          <option
-            value="finished"
-            defaultValue={order.status === "finished" ? true : false}
-          >
-            {"Finished"}
-          </option>
+        <select
+          defaultValue={order.order[0] && order.order[0].status}
+          className="outline-none"
+          onChange={handleStatus.bind(this)}
+        >
+          <option value="pending">{"Pending"}</option>
+          <option value="started">{"Started"}</option>
+          <option value="finished">{"Finished"}</option>
         </select>
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-gray-500">
@@ -84,7 +82,7 @@ const Order = ({ order, index }) => {
           </option>
           {order.staff.map((staff, index) => {
             return (
-              <option key={index} value={staff.name}>
+              <option key={index} value={staff.id}>
                 {staff.name}
               </option>
             );
@@ -94,7 +92,7 @@ const Order = ({ order, index }) => {
       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
         <button
           className="bg-green-400 text-white p-2 rounded-md font-bold hover:bg-green-900"
-          onClick={handleUpdateRequest}
+          onClick={handleUpdateRequest.bind(this, order.id)}
         >
           Submit
         </button>
