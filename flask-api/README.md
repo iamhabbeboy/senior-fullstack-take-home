@@ -21,3 +21,7 @@ Run the app with
 ```
 flask run
 ```
+# Work Summary
+- Order request is received via github webhook 
+- Order request Listing
+- Assign staff
