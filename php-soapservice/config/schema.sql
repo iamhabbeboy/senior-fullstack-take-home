@@ -1,5 +1,5 @@
 CREATE TABLE `companies` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE `companies` (
 );
 
 CREATE TABLE `holidays` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `user_id` int DEFAULT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE `holidays` (
 );
 
 CREATE TABLE `services` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `service_category_id` int DEFAULT NULL,
@@ -30,14 +30,14 @@ CREATE TABLE `services` (
 );
 
 CREATE TABLE `service_categories` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `name` varchar(100) DEFAULT NULL
 );
 
 CREATE TABLE `service_rates` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `service_id` int DEFAULT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE `service_rates` (
 );
 
 CREATE TABLE `service_request` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `issue_id` int NOT NULL,
@@ -68,7 +68,7 @@ CREATE TABLE `service_request` (
 );
 
 CREATE TABLE `users` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `company_id` int DEFAULT NULL,
@@ -83,7 +83,7 @@ CREATE TABLE `users` (
 );
 
 CREATE TABLE `work_orders` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `service_request_id` int DEFAULT NULL,

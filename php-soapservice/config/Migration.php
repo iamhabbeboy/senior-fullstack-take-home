@@ -1,15 +1,19 @@
 <?php
 
 namespace Application\config;
-
-use Application\config\MysqlDBAdapter;
-
 class Migration extends MysqlDBAdapter
 {
-    const FILE_PATH = './schema.sql';
+    const FILE_PATH = '../config/schema.sql';
 
-    public function getSql()
+    public function run()
     {
+        echo "Started SQL dump...\n";
         $file = file_get_contents(self::FILE_PATH);
+        try{
+            $this->getConnection()->exec($file);
+            echo "Done...\n";
+        } catch(\PDOException $e) {
+            echo $e->getMessage();
+        }
     }
 }

@@ -1,6 +1,6 @@
 #!/usr/bin/env php    
 <?php
-
+require '../vendor/autoload.php';
 //echo "Add utility script here\n";
 
 if (php_sapi_name() !== 'cli') {
@@ -14,10 +14,10 @@ if(!isset($input[1])) {
 
 switch($input[1]) {
     case 'migration':
-        echo 'This is migration';
+        (new \Application\config\Migration())->run();
         break;
     case 'seeder':
-        echo 'This is seeder';
+        (new \Application\config\Seeder())->run();
         break;
     case 'rollback_seeder':
         echo 'Delete seeder';
