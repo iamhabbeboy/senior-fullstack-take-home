@@ -19,8 +19,8 @@ switch($input[1]) {
     case 'seeder':
         (new \Application\config\Seeder())->run();
         break;
-    case 'rollback_seeder':
-        echo 'Delete seeder';
+    case 'truncate':
+        (new \Application\config\Migration())->delete();
         break;
     case 'help':
         echo './setup migration [x] Run SQL and create tables';

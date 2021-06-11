@@ -16,4 +16,14 @@ class Migration extends MysqlDBAdapter
             echo $e->getMessage();
         }
     }
+
+    public function delete()
+    {
+        $tables = ['companies', 'holidays', 'services', 'service_categories', 'service_rates', 'service_request', 'users', 'work_orders'];
+        echo "Started truncation...";
+        foreach($tables as $table) {
+            $this->getConnection()->exec("TRUNCATE TABLE {$table}");
+        }
+        echo "Done...";
+    }
 }
