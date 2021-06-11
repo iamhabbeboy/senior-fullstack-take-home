@@ -22,6 +22,72 @@ class Seeder extends MysqlDBAdapter
         }
     }
 
+    public function service()
+    {
+        $faker = \Faker\Factory::create();
+        $startDate = $faker->dateTimeThisMonth('now');
+        for($i = 0; $i <= 3; $i++) {
+            $user = new \Application\Entity\Service();
+            $user->service_category_id = $faker->numberBetween(1, 3);
+            $user->company_id = $faker->numberBetween(1, 3);
+            $user->name = $faker->randomElement(['Regular', 'Spring/Deep Cleaning', 'Move-in/Move-out Cleaning', 'Green Cleaning', 'Secure Cleaning', 'Post-Construction Cleaning', 'Warehouses', 'Industrial equipment
+            ', 'Loading docks']);
+            $user->save();
+        }
+    }
+
+    public function serviceRate()
+    {
+        $faker = \Faker\Factory::create();
+        for($i = 0; $i <= 3; $i++) {
+            $user = new \Application\Entity\ServiceRate();
+            $user->company_id = $faker->numberBetween(1, 3);
+            $user->service_id = $faker->numberBetween(1, 3);
+            $user->unit = $faker->numberBetween(1, 3000);
+            $user->amount = $faker->numberBetween(5000, 10000);
+            $user->duration = $faker->numberBetween(1.5, 5). "h";
+            $user->supply_markup = $faker->numberBetween(10, 50);
+            $user->overhead_markup = $faker->numberBetween(10, 50);
+            $user->misc_markup = $faker->numberBetween(10, 50);
+            $user->service_request_id = $faker->numberBetween(1, 3);
+            $user->save();
+        }
+    }
+
+    public function serviceRequest()
+    {
+        $faker = \Faker\Factory::create();
+        $startDate = $faker->dateTimeThisMonth('now');
+        for($i = 0; $i <= 3; $i++) {
+            $user = new \Application\Entity\ServiceRequest();
+            $user->issue_id = $faker->numberBetween(1, 3);
+            $user->user_id = 0;
+            $user->company_id = $faker->numberBetween(1, 3);
+            $user->proposed_start_date = $startDate;
+            $user->proposed_end_date = $faker->dateTimeInInterval($startDate = $startDate, '+ 5 days');
+            $user->actual_start_date = $faker->dateTimeInInterval($startDate = $startDate, '+ 7 days');
+            $user->actual_end_date = $faker->dateTimeInInterval($startDate = $startDate, '+ 10 days');
+            $user->title = $faker->sentence(1);
+            $user->status = "pending";
+            $user->adjustment = "";
+            $user->save();
+        }
+    }
+    
+
+    public function workOrder()
+    {
+        $faker = \Faker\Factory::create();
+        $startDate = $faker->dateTimeThisMonth('now');
+        for($i = 0; $i <= 3; $i++) {
+            $user = new \Application\Entity\WorkOrder();
+            $user->service_request_id = $faker->numberBetween(1, 3);
+            $user->user_id = $faker->numberBetween(1, 3);
+            $user->status = 'approve';
+            $user->save();
+        }
+    }
+
     public function holiday()
     {
         $faker = \Faker\Factory::create();
