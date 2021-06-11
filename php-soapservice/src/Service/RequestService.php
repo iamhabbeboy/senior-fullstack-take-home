@@ -15,7 +15,7 @@ use Application\Exception\RecordNotFoundException;
 (new DotEnv())->load();
 class RequestService extends BaseService
 {
-    public function helloFromPHP()
+    public function index()
     {
         $response = ServiceRequest::where(['company_id' => $this->params['id']]);
         return [
@@ -23,9 +23,10 @@ class RequestService extends BaseService
         ];
     }
 
-    public function storeServices()
+    public function store()
     {
         $title = $this->params['title'];
+        $issueId = $this->params['issue_id'];
         $body = explode("\n", $this->params['body']);
         $payload = [];
         foreach($body as $param) {
@@ -34,9 +35,10 @@ class RequestService extends BaseService
         }
 
         $request = new ServiceRequest();
-        $request->company_id = $payload['company_id'];
+        $request->company_id = $payload['company_id'] ?? 0;
         $request->title = $title;
         $request->user_id = 0;
+        $request->issue_id = $issueId;
         $request->proposed_start_date = $payload['check_in'];
         $request->proposed_end_date = $payload['check_out'];
         $request->actual_start_date = $payload['check_in'];
@@ -77,13 +79,10 @@ class RequestService extends BaseService
         $holidayEndDate = date_format($userRelationship['holiday'][0]->start_date, 'd-m-Y H:i:s');
         $serviceActualStartDate = date_format($serviceRequest->actual_start_date, 'd-m-Y H:i:s');
         $serviceActualEndDate = date_format($serviceRequest->actual_end_date, 'd-m-Y H:i:s');
-        return [
-            'start' => $holidayStartDate,
-            'end' => $holidayEndDate,
-            'serviceDate' => $serviceActualStartDate,
-            'enddate' => $serviceActualEndDate,
-            'compare' => ($holidayStartDate >= $serviceActualStartDate) && ($holidayEndDate <= $serviceActualEndDate)
-        ];
+
+        if($serviceActualStartDate < $holidayEndDate) {
+            return false;
+        }
 
         $workOrder = new WorkOrder();
         $workOrder->service_request_id = $this->params['service_request_id'];

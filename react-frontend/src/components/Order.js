@@ -28,9 +28,10 @@ const Order = ({ order, index }) => {
     })
       .then(response => response.json())
       .then(response => {
-        console.log(response);
-        // setOrders(JSON.parse(response).data);
-        // setLoading(false);
+        if (response === "false") {
+          return alert("Staff not available for this day");
+        }
+        window.location.reload(false);
       });
   };
 
@@ -45,7 +46,9 @@ const Order = ({ order, index }) => {
         <div className="font-medium text-gray-900">{order.title}</div>
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
-        <div className="font-medium text-gray-900">{"regular"}</div>
+        <div className="font-medium text-gray-900">
+          {order.service[0] && order.service[0].name}
+        </div>
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
         <select

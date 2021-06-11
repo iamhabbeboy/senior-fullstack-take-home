@@ -25,7 +25,6 @@ Some issues you may run into includes the following extensions missing
 - mysql pdo extension first check with `php -m | grep pdo_mysql` if missing run `apt-get install php-mysql` to install
 - SOAP not found after running `phpinfo()` install `sudo apt-get install php-soap`
 
-
 ### Useful commands
 
 ```

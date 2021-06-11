@@ -14,6 +14,8 @@ class ServiceRequest extends ActiveRecord
 
     public int $company_id;
 
+    public int $issue_id;
+
     public $proposed_start_date;
 
     public $proposed_end_date;
@@ -47,6 +49,11 @@ class ServiceRequest extends ActiveRecord
         return User::where(['company_id' => $this->company_id]);
     }
 
+    public function getService()
+    {
+        return Service::where(['company_id' => $this->company_id ?? 0]);
+    }
+
     public function getWorkOrder()
     {
         try {
@@ -62,7 +69,9 @@ class ServiceRequest extends ActiveRecord
             'id' => $this->id,
             'title' => $this->title,
             'status' => $this->status,
+            'issue_id' => $this->issue_id,
             'rate' => $this->getServiceRate(),
+            'service' => $this->getService(),
             'proposed_start_date' => $this->proposed_start_date,
             'proposed_end_date' => $this->proposed_end_date,
             'actual_start_date' => $this->actual_start_date,
