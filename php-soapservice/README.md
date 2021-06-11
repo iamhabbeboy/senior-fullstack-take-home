@@ -54,3 +54,11 @@ make down
 ```
 
 If you are on a windows machine, look at the Makefile and run the commands in there directorly on your terminal
+
+# Using CLI for Data model
+`./setup migration` 
+  - Create all tables
+  `./setup seeder` 
+  - Add dummy data to tables
+`./setup truncate` 
+    - Delete all dummy data in tables
