@@ -3,6 +3,8 @@ version: '2'
 services:
     frontend:
         build: './react-frontend'
+    api:
+        build: './flask-api'
     backend:
         build: './php-soapservice'
          
